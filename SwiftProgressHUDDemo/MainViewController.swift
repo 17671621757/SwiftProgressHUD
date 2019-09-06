@@ -7,9 +7,6 @@
 //
 
 import UIKit
-import CommonParameter
-import YJSwiftExtensions
-import Lottie
 
 fileprivate let btnW = 65.0, btnH = 38.0, rightMargin = 10.0, fontSize = 13.0
 
@@ -32,9 +29,9 @@ extension MainViewController {
     
     func _setUpShowDifferenceMainView() -> () {
         
-        let btnVGap = (kSCREEN_HEIGHT - btnH * 9) / 10.0
+        let btnVGap = (Double(UIScreen.main.bounds.size.height) - btnH * 9) / 10.0
         let btnFont = UIFont.systemFont(ofSize: CGFloat(fontSize))
-        let btnX = kSCREEN_WIDTH - btnW - rightMargin
+        let btnX = Double(UIScreen.main.bounds.size.width) - btnW - rightMargin
         
         let showWaitBtn = getBtn(frame: CGRect(x: btnX, y: btnVGap, width: btnW, height: btnH), cornerRadius: btnH * 0.5, title: "等待", btnFont: btnFont, btnTag: 1)
         view.addSubview(showWaitBtn)
@@ -66,7 +63,7 @@ extension MainViewController {
     }
     
     /// 点击事件
-    func showBtnActionClick(btn: UIButton) {
+    @objc func showBtnActionClick(btn: UIButton) {
         let btnTag = btn.tag
         if btnTag == 1 { // wait
             
@@ -136,7 +133,7 @@ extension MainViewController {
             
         }else if btnTag == 9 { // showLottie
             
-            showLottie()
+            
             
         }
 
@@ -162,30 +159,7 @@ extension MainViewController {
     }
     
     
-    fileprivate func showLottie() {
-        
-        let lotWidth = 90.0
-        let lotHeight = 90.0
-        let lotViewX = (kSCREEN_WIDTH - lotWidth) * 0.5
-        let lotViewY = (kSCREEN_HEIGHT - lotHeight) * 0.5
-        
-        let animationView = LOTAnimationView(name: "lottie_loading")
-        animationView.frame = CGRect(x: lotViewX, y: lotViewY, width: lotWidth, height: lotHeight)
-        animationView.backgroundColor = UIColor.black.withAlphaComponent(0.8)
-        animationView.layer.cornerRadius = 5.0
-        animationView.loopAnimation = true
-        self.view.addSubview(animationView)
-        animationView.play{ (finished) in
-            // Do Something
-            print("showLottie-Finish")
-            animationView.removeFromSuperview()
-        }
-        
-        /// 模拟 1s后 加载完成
-        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-            animationView.stop()
-        }
-    }
+   
 }
 
 // MARK: - 方法提供
@@ -196,7 +170,7 @@ extension MainViewController {
         let btn = UIButton(frame: frame)
         btn.setTitle(title, for: .normal)
         btn.titleLabel?.font = btnFont
-        btn.setBackgroundImage(UIImage.yj_createImage(UIColor.yj_randomColor()), for: .normal)
+        btn.backgroundColor = UIColor.gray
         btn.addTarget(self, action: #selector(showBtnActionClick(btn:)), for: .touchUpInside)
         btn.tag = btnTag
         btn.layer.cornerRadius = CGFloat(cornerRadius)
